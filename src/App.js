@@ -16,8 +16,8 @@ import AuthProvider from './context/AuthProvider';
 import axios from 'axios';
 import Dashboard from './Pages/Dashboard/Dashboard/Dashboard';
 
-// axios.defaults.baseURL = 'https://arcane-sea-19571.herokuapp.com/'
-axios.defaults.baseURL = 'http://localhost:5000/'
+axios.defaults.baseURL = 'https://guarded-forest-62947.herokuapp.com/'
+// axios.defaults.baseURL = 'http://localhost:5000/'
 
 function App() {
   return (
