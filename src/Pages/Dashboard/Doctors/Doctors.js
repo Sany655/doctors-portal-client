@@ -7,15 +7,23 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Loading from '../../Shared/Loading/Loading'
 
 const Doctors = () => {
     const [doctors, setDoctors] = useState([]);
+    const [loading, setLoading] = useState(true);
     useEffect(() => {
         axios('/doctors', (res) => {
             setDoctors(res.data);
             console.log(res.data);
+        }).finally(()=>{
+            setLoading(false)
         })
     }, [])
+
+    if(loading){
+        return <Loading />
+    }
     return (
         <div>
             <h2>Total Doctors : {doctors.length}</h2>
@@ -37,12 +45,10 @@ const Doctors = () => {
                                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                             >
                                 <TableCell component="th" scope="row" align="center">{doctor._id}</TableCell>
-                                <TableCell align="center">{doctor.img}</TableCell>
+                                <TableCell align="center"><img height='100%' width='100%' src={`data:image/png;base64,${doctor.image}`} alt="" /></TableCell>
                                 <TableCell align="center">{doctor.name}</TableCell>
                                 <TableCell align="center">{doctor.email}</TableCell>
-                                <TableCell align="center">
-                                    some Action
-                                </TableCell>
+                                <TableCell align="center"><Button variant='outline' color='danger' onClick={()=>alert('coming soon')}>Delete</Button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
