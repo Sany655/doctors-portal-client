@@ -5,12 +5,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -25,34 +23,67 @@ import MakeAdmin from '../MakeAdmin/MakeAdmin';
 import AddDoctor from '../AddDoctor/AddDoctor';
 import useAuth from '../../../hooks/useAuth';
 import AdminRoute from '../../../AdminRoute';
+import HomeIcon from '@mui/icons-material/Home';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import LogoutIcon from '@mui/icons-material/Logout';
+import Doctors from '../Doctors/Doctors';
+
 const drawerWidth = 240;
 
 const Dashboard = (props) => {
     let { path, url } = useRouteMatch();
     const { window } = props;
     const [mobileOpen, setMobileOpen] = React.useState(false);
-    const { admin,user } = useAuth();
+    const { admin, user, logout } = useAuth();
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
 
+    const drawerLinks = [
+        { name: 'Landing Page', to: '/', icon: <HomeIcon /> },
+        { name: 'Dashboard', to: `${url}`, icon: <DashboardIcon /> }
+    ]
+
+    if (admin) {
+        drawerLinks.push(
+            { name: 'Add Doctor', to: `${url}/addDoctor`, icon: <GroupAddIcon /> },
+            { name: 'Doctors', to: `${url}/doctors`, icon: <PeopleAltIcon /> },
+            { name: 'Make Admin', to: `${url}/makeAdmin`, icon: <AdminPanelSettingsIcon /> }
+        )
+    }
+
+    drawerLinks.push({ name: 'Logout', to: '', icon: <LogoutIcon />, disabled: true })
+
     const drawer = (
         <div>
             <Toolbar><Typography variant='h6'>{user.name}</Typography></Toolbar>
             <Divider />
-            <NavLink exact style={{display:'block', textAlign:'center'}} activeStyle={{color:'red'}} to='/appointments'>Landing Page</NavLink>
-            <NavLink exact style={{display:'block', textAlign:'center'}} activeStyle={{color:'red'}} to={`${url}`}>Dashboard</NavLink>
-            {admin?<><NavLink exact style={{display:'block', textAlign:'center'}} activeStyle={{color:'red'}} to={`${url}/makeAdmin`}>Make Admin</NavLink>
-            <NavLink exact style={{display:'block', textAlign:'center'}} activeStyle={{color:'red'}} to={`${url}/addDoctor`}>Add Doctor</NavLink></>:''}
             <List>
-                {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>
-                            {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                        </ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
+                {drawerLinks.map((link, index) => (
+                    <NavLink
+                        key={index}
+                        onClick={(e) => {
+                            if (link.disabled) {
+                                e.preventDefault()
+                                logout()
+                            }
+                        }}
+                        exact
+                        to={link.to}
+                        style={{ textDecoration: 'none', color: 'black' }}
+                        activeStyle={{ color: 'blue' }}
+                    >
+                        <ListItem button>
+                            <ListItemIcon>
+                                {link.icon}
+                            </ListItemIcon>
+                            <ListItemText primary={link.name} />
+                        </ListItem>
+                    </NavLink>
                 ))}
             </List>
         </div>
@@ -119,7 +150,7 @@ const Dashboard = (props) => {
             </Box>
             <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` }, textAlign:'center' }}
+                sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` }, textAlign: 'center' }}
             >
                 {/* <Toolbar /> */}
                 <Switch>
@@ -131,6 +162,9 @@ const Dashboard = (props) => {
                     </AdminRoute>
                     <AdminRoute path={`${path}/addDoctor`}>
                         <AddDoctor />
+                    </AdminRoute>
+                    <AdminRoute path={`${path}/doctors`}>
+                        <Doctors />
                     </AdminRoute>
                 </Switch>
             </Box>

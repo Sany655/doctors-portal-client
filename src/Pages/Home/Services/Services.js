@@ -3,7 +3,7 @@ import React from 'react'
 
 const Services = () => {
     return (
-        <div style={{ textAlign: 'center', marginTop: '25px' }}>
+        <div style={{ textAlign: 'center', marginTop: '90px',marginBottom:'90px' }}>
             <Typography variant='h4' sx={{ color: 'success.main' }}>OUR SERVICES</Typography>
             <Typography variant='h2' sx={{ color: 'black' }}>Service we provide</Typography>
             <Container>
