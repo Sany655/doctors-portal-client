@@ -7,19 +7,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import Button from '@mui/material/Button';
 import Loading from '../../Shared/Loading/Loading'
 
 const Doctors = () => {
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
     useEffect(() => {
-        axios('/doctors', (res) => {
+        showData()
+    }, [])
+
+    function showData(){
+        axios('/doctors').then((res) => {
             setDoctors(res.data);
-            console.log(res.data);
         }).finally(()=>{
             setLoading(false)
         })
-    }, [])
+    }
+
+    const handleDelete = (id) => {
+        setLoading(true)
+        axios.delete(`/doctors/${id}`).then(()=>{
+            alert('Delete successfully');
+            showData();
+        }).finally(()=>{
+            setLoading(false)
+        })
+    }
 
     if(loading){
         return <Loading />
@@ -48,7 +62,7 @@ const Doctors = () => {
                                 <TableCell align="center"><img height='100%' width='100%' src={`data:image/png;base64,${doctor.image}`} alt="" /></TableCell>
                                 <TableCell align="center">{doctor.name}</TableCell>
                                 <TableCell align="center">{doctor.email}</TableCell>
-                                <TableCell align="center"><Button variant='outline' color='danger' onClick={()=>alert('coming soon')}>Delete</Button></TableCell>
+                                <TableCell align="center"><Button variant='outline' color='danger' onClick={()=>handleDelete(doctor._id)}>Delete</Button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
