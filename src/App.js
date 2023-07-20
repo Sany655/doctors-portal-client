@@ -16,7 +16,8 @@ import AuthProvider from './context/AuthProvider';
 import axios from 'axios';
 import Dashboard from './Pages/Dashboard/Dashboard/Dashboard';
 
-axios.defaults.baseURL = 'https://guarded-forest-62947.herokuapp.com/'
+// axios.defaults.baseURL = 'https://guarded-forest-62947.herokuapp.com/'
+axios.defaults.baseURL = 'https://doctors-portal-4fhl.onrender.com'
 // axios.defaults.baseURL = 'http://localhost:5000/'
 
 function App() {
